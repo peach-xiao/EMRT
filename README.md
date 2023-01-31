@@ -1,3 +1,3 @@
-## Enhancing Multi-scale Representations with Transformer for Remote Sensing Image Semantic Segmentation
-# Introduction
+# Enhancing Multi-scale Representations with Transformer for Remote Sensing Image Semantic Segmentation
+## Introduction
 This is the code of EMRT....
