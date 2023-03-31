@@ -6,10 +6,19 @@ This repository is a PaddlePaddle implementation for our Transactions on Geoscie
 
 ![14](https://user-images.githubusercontent.com/40911688/229135665-8b2e32e1-1880-48b2-a6eb-c60d0ef76905.png)
 
+# Install
+
+
 # Usage
 
+代码
+`<hello world>`  
+
+`hello world`  
 
 # Citation
+If you find our project useful in your research, please consider citing:
+```
 @ARTICLE{10066301,
   author={Xiao, Tao and Liu, Yikun and Huang, Yuwen and Li, Mingsong and Yang, Gongping},
   journal={IEEE Transactions on Geoscience and Remote Sensing}, 
@@ -20,3 +29,4 @@ This repository is a PaddlePaddle implementation for our Transactions on Geoscie
   pages={1-16},
   doi={10.1109/TGRS.2023.3256064}
 }
+```
