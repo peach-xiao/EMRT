@@ -24,26 +24,22 @@ This project uses PaddlePaddle. Go check them out if you don't have them locally
 conda create -n paddlevit python=3.7 -y
 conda activate paddlevit
 ```
-
 2. Install PaddlePaddle following the official instructions, e.g.,
 ```
 conda install paddlepaddle-gpu==2.1.2 cudatoolkit=10.2 --channel https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/Paddle/
 ```
 > Note: please change the paddlepaddle version and cuda version accordingly to your environment.
-
 3. Install dependency packages
   * General dependencies:
   ```
   pip install yacs pyyaml
   ```
-reference documents
-> If you have any questions about installing and using PaddlePaddle, please refer to [PaddleSeg](https://github.com/PaddlePaddle/PaddleSeg) or [PaddleViT](https://github.com/BR-IDL/PaddleViT)
-
-* 1. 项目1  
-* 2. 项目2  
-* 3. 项目3  
+### Reference Documents
+If you have any questions about installing and using PaddlePaddle, please refer to [PaddleSeg](https://github.com/PaddlePaddle/PaddleSeg) or [PaddleViT](https://github.com/BR-IDL/PaddleViT)
 
 # Usage
+
+
 
 *强调*  (示例：斜体)
  _强调_  (示例：斜体)
@@ -51,6 +47,10 @@ reference documents
  __加重强调__ (示例：粗体)
 ***特别强调*** (示例：粗斜体)
 ___特别强调___  (示例：粗斜体)
+
+* 1. 项目1  
+* 2. 项目2  
+* 3. 项目3  
 
 代码
 `<hello world>`  
