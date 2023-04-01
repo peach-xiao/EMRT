@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This repository is a PaddlePaddle implementation for our Transactions on Geoscience and Remote Sensing (IEEE TGRS) [[paper]](https://ieeexplore.ieee.org/document/10066301).
+This repository is a PaddlePaddle implementation for our IEEE Transactions on Geoscience and Remote Sensing (IEEE TGRS) [[paper]](https://ieeexplore.ieee.org/document/10066301).
 
 
 ![14](https://user-images.githubusercontent.com/40911688/229135665-8b2e32e1-1880-48b2-a6eb-c60d0ef76905.png)
@@ -36,6 +36,9 @@ conda install paddlepaddle-gpu==2.1.2 cudatoolkit=10.2 --channel https://mirrors
   ```
   pip install yacs pyyaml
   ```
+
+>> If you have any questions about installing and using PaddlePaddle, please refer to [PaddleSeg](https://github.com/PaddlePaddle/PaddleSeg) or [PaddleViT](https://github.com/BR-IDL/PaddleViT).  
+
 5. 
 * 1. 项目1  
 * 2. 项目2  
