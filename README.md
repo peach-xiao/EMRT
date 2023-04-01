@@ -36,10 +36,9 @@ conda install paddlepaddle-gpu==2.1.2 cudatoolkit=10.2 --channel https://mirrors
   ```
   pip install yacs pyyaml
   ```
+reference documents
+> If you have any questions about installing and using PaddlePaddle, please refer to [PaddleSeg](https://github.com/PaddlePaddle/PaddleSeg) or [PaddleViT](https://github.com/BR-IDL/PaddleViT)
 
->> If you have any questions about installing and using PaddlePaddle, please refer to [PaddleSeg](https://github.com/PaddlePaddle/PaddleSeg) or [PaddleViT](https://github.com/BR-IDL/PaddleViT).  
-
-5. 
 * 1. 项目1  
 * 2. 项目2  
 * 3. 项目3  
