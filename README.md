@@ -21,7 +21,7 @@ This project uses PaddlePaddle. Go check them out if you don't have them locally
 ### Installation
 1. Create a conda virtual environment and activate it.
 ```
-conda create -n paddlevit python=3.7 -y
+conda create -n paddlevit python=3.8 -y
 conda activate paddlevit
 ```
 2. Install PaddlePaddle following the official instructions, e.g.,
