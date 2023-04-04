@@ -1,0 +1,47 @@
+DATA:
+    DATASET: 'Vaihingen'
+    BATCH_SIZE: 8
+    BATCH_SIZE_VAL: 4
+    DATA_PATH: '/data/sdu02_peach/Vaihingen_processing_tif'
+    CROP_SIZE: (256, 256)
+    NUM_CLASSES: 6
+TRAIN:
+    BASE_LR: 0.01
+    END_LR: 0.0
+    ITERS: 120000
+    IGNORE_INDEX: 255
+    LOSS: "MixSoftmaxCrossEntropyLoss"
+    LR_SCHEDULER:
+        NAME: 'PolynomialDecay'
+    OPTIMIZER:
+        WEIGHT_DECAY: 1e-4
+        GRAD_CLIP: 1.0
+        NAME: 'SGD'
+        MOMENTUM: 0.9
+MODEL:
+    NAME: "EMRT"
+    ENCODER:
+        TYPE: "resnet50"
+#        TYPE: "resnet101"
+        OUT_INDICES: [0, 1]
+        MULTI_GRID:
+        MULTI_DILATION:
+
+    OUTPUT_STRIDE: 32 #resnet output stride 32, 16, 8,
+    DEFORMABLE:
+        EMBED_DIM: 256
+        DEPTH: 4
+        NUM_HEADS: 8
+        MLP_RATIO: 3.
+        HID_DIM: 64
+    AUX:
+        AUXIHEAD: False
+        AUXHEAD_ALIGN_CORNERS: False
+#    PRETRAINED: "/data/sdu02_peach/pretrain_models_paddleclass/ResNet50_pretrained.pdparams"
+#    PRETRAINED: "/data/sdu02_peach/pretrain_models_paddleclass/ResNet101_pretrained.pdparams"
+SAVE_DIR: "/data/sdu02_peach/Paddle/EMRT_256x256_120k_vaihingen_resnet50_pretrain_os32"
+VAL:
+    MULTI_SCALES_VAL: False
+    IMAGE_BASE_SIZE: 256
+    CROP_SIZE: [256, 256]
+SAVE_FREQ_CHECKPOINT: 1000

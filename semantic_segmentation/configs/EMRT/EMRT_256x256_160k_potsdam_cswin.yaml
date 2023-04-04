@@ -1,0 +1,68 @@
+DATA:
+    DATASET: 'Potsdam'
+    BATCH_SIZE: 8
+    BATCH_SIZE_VAL: 4
+    DATA_PATH: '/data/sdu02_peach/potsdam_processing_tif'
+    CROP_SIZE: (256, 256)
+    NUM_CLASSES: 6
+TRAIN:
+    BASE_LR: 0.01
+    END_LR: 0.0
+    ITERS: 160000
+    IGNORE_INDEX: 255
+    LOSS: "MixSoftmaxCrossEntropyLoss"  #   "MixSoftmaxCrossEntropyLoss"  #CrossEntropyLoss
+    LR_SCHEDULER:
+        NAME: 'PolynomialDecay'
+    OPTIMIZER:
+        WEIGHT_DECAY: 1e-4
+        GRAD_CLIP: 1.0
+        NAME: 'SGD'
+        MOMENTUM: 0.9
+MODEL:
+    NAME: "EMRT_CSwin"
+    DROPOUT: 0.0
+    ATTENTION_DROPOUT: 0.0
+    DROP_PATH: 0.2
+    ENCODER:
+        TYPE: 'CSwinTransformer'
+        OUT_INDICES: [0, 1, 2, 3]   # stage_i
+    PRETRAINED: "/data/sdu02_peach/Paddle_pdparams/pretrain_models_paddleViT_Segmentation/cswin_tiny_224.pdparams"
+    UPERHEAD:
+        IN_CHANNELS: [64, 128, 256, 512]
+        IN_INDEX: [0, 1, 2, 3]
+        POOL_SCALES: [1, 2, 3, 6]
+        CHANNELS: 512
+        DROP_RATIO: 0.1
+        ALIGN_CORNERS: False
+    TRANS:
+        PATCH_SIZE: 4
+        IN_CHANNELS: 3
+        HIDDEN_SIZE: 64  # 64(tiny, small), 96(base), 144(large)
+        EMBED_DIM: 64
+        STAGE_DEPTHS: [1, 2, 21, 1]
+        NUM_HEADS: [2, 4, 8, 16]
+        SPLIT_SIZES: [1, 2, 7, 7]
+        MLP_RATIO: 4
+        QKV_BIAS: True
+        QK_SCALE: None
+        APE: False  # absolute positional embeddings
+        PATCH_NORM: True
+    DEFORMABLE:
+        EMBED_DIM: 256
+        DEPTH: 4
+        NUM_HEADS: 8
+        MLP_RATIO: 3.
+        HID_DIM: 64
+    AUX:
+        AUXIHEAD: True  #Aux loss
+        AUXHEAD_ALIGN_CORNERS: False
+    AUXFCN:
+        IN_CHANNELS: 256
+        UP_RATIO: 1
+
+SAVE_DIR: "/data/sdu02_peach/Paddle/EMRT_256x256_160k_potsdam_cswin_tiny_pretrain"
+VAL:
+    MULTI_SCALES_VAL: False
+    IMAGE_BASE_SIZE: 256
+    CROP_SIZE: [256, 256]
+SAVE_FREQ_CHECKPOINT: 2000
