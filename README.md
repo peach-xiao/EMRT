@@ -1,6 +1,6 @@
 # Enhancing Multiscale Representations With Transformer for Remote Sensing Image Semantic Segmentation
 
-## Introduction
+# Introduction
 
 This repository is a PaddlePaddle implementation for our IEEE Transactions on Geoscience and Remote Sensing (IEEE TGRS) [[paper]](https://ieeexplore.ieee.org/document/10066301).
 
@@ -42,26 +42,33 @@ If you have any questions about installing and using PaddlePaddle, please refer 
 * You can download Potsdam dataset from [https://isprs.org/education/benchmarks/UrbanSemLab/2d-sem-label-potsdam.aspx](https://isprs.org/education/benchmarks/UrbanSemLab/2d-sem-label-potsdam.aspx).
 * You can download Vaihingen dataset from [https://isprs.org/education/benchmarks/UrbanSemLab/2d-sem-label-vaihingen.aspx](https://isprs.org/education/benchmarks/UrbanSemLab/2d-sem-label-vaihingen.aspx).
 
+# Pretrained Weights Perparation
+You can download the pre-trained weights you need in ".pdparams" format from [PaddleSeg](https://github.com/PaddlePaddle/PaddleSeg), [PaddleViT](https://github.com/BR-IDL/PaddleViT) or [PaddleClas](https://github.com/PaddlePaddle/PaddleClas). The weights of the backbone network used in the paper are provided here:
+
+` BaiduYun:` [https://pan.baidu.com/s/1c5XCIDmYz9q5j0Nr9Ojbaw](https://pan.baidu.com/s/1c5XCIDmYz9q5j0Nr9Ojbaw)
+
+` Password:` wcub
 
 # Usage
+We provide a simple demo to illustrate how to use EMRT for training and validation. Note that the method in this paper is run on a single GPU.
+```
+# Find the location of this project, for example
+cd project/EMRT/semantic_segmentation/
 
+Training:
+# Modify the GPU number and yaml file path you want to use
+CUDA_VISIBLE_DEVICES=0 python3 train.py --config ./configs/EMRT/EMRT_256x256_160k_potsdam.yaml
 
+# Or just modify the GPU number you want to use if you define the default value of the "--config" parameter in train.py
+CUDA_VISIBLE_DEVICES=0 python3 train.py
 
-*强调*  (示例：斜体)
- _强调_  (示例：斜体)
-**加重强调**  (示例：粗体)
- __加重强调__ (示例：粗体)
-***特别强调*** (示例：粗斜体)
-___特别强调___  (示例：粗斜体)
+Validation:
+# Use the same way to start validating
+# CUDA_VISIBLE_DEVICES=0 python3 val.py --config ./configs/EMRT/EMRT_256x256_160k_potsdam.yaml --model_path ./EMRT_256x256_160k_potsdam_resnet50_pretrain_os32/best_model.pdparams
 
-* 1. 项目1  
-* 2. 项目2  
-* 3. 项目3  
-
-代码
-`<hello world>`  
-
-`hello world`  
+# Or just modify the GPU number you want to use if you define the default values ​​of the "--config" and "--model_path" parameters in val.py
+CUDA_VISIBLE_DEVICES=0 python3 val.py
+```
 
 # Citation
 If you find our work useful in your research, please consider citing:
@@ -77,3 +84,6 @@ If you find our work useful in your research, please consider citing:
   doi={10.1109/TGRS.2023.3256064}
 }
 ```
+
+# Other Links
+* None
