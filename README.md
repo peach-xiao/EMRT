@@ -35,7 +35,13 @@ conda install paddlepaddle-gpu==2.1.2 cudatoolkit=10.2 --channel https://mirrors
   pip install yacs pyyaml
   ```
 ### Reference Documents
-If you have any questions about installing and using PaddlePaddle, please refer to [PaddleSeg](https://github.com/PaddlePaddle/PaddleSeg) or [PaddleViT](https://github.com/BR-IDL/PaddleViT)
+If you have any questions about installing and using PaddlePaddle, please refer to [PaddleSeg](https://github.com/PaddlePaddle/PaddleSeg) or [PaddleViT](https://github.com/BR-IDL/PaddleViT).
+
+# Datasets Perparation
+* You can download LoveDA dataset from [https://github.com/Junjue-Wang/LoveDA](https://github.com/Junjue-Wang/LoveDA).
+* You can download Potsdam dataset from [https://isprs.org/education/benchmarks/UrbanSemLab/2d-sem-label-potsdam.aspx](https://isprs.org/education/benchmarks/UrbanSemLab/2d-sem-label-potsdam.aspx).
+* You can download Vaihingen dataset from [https://isprs.org/education/benchmarks/UrbanSemLab/2d-sem-label-vaihingen.aspx](https://isprs.org/education/benchmarks/UrbanSemLab/2d-sem-label-vaihingen.aspx).
+
 
 # Usage
 
