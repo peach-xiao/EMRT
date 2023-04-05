@@ -212,7 +212,6 @@ def main():
                 os.remove(files_to_remove[0])
                 os.remove(files_to_remove[1])
 
-            # 保存最佳模型
             if mean_iou > best_mean_iou:
                 best_mean_iou = mean_iou
                 best_acc = acc
