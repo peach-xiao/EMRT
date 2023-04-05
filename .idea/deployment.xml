@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="EMRT_xiaotao@211.87.232.115:22" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="EMRT_xiaotao@211.87.232.115:22">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/EMRT" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="sdu02_data">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="xiaotao@211.87.232.115:22">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/PaddleViT-develop" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath path="/PaddleViT-develop/semantic_segmentation/draw_curve0/multihead_train_loss.txt" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>
