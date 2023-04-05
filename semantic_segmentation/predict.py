@@ -85,7 +85,6 @@ def get_palette(dataset_name):
     elif dataset_name.lower() == "loveda":
         label_values = ['imp_surfaces', 'building', 'low_vegetation',
                         'tree', 'car', 'clutter']
-        # Color palette 调色板
 
         palette = {0: (255, 255, 255),  # Background
                    1: (255, 0, 0),  # Building
@@ -110,7 +109,7 @@ if __name__ == '__main__':
     paddle.set_device(place)
     # build model
     model = get_model(config)
-    if args.model_path:  # 加载模型
+    if args.model_path:
         load_entire_model(model, args.model_path)
         logger.info('Loaded trained params of model successfully')
     model.eval()
@@ -208,13 +207,8 @@ def predict(dataloader, model, total_batch, debug_steps=100, logger=None):
     with paddle.no_grad():
         for batch_id, data in enumerate(dataloader):
             image = data[0]
-            # label = data[1] # no label info in prediction
             output = model(image)
-            # loss = criterion(output, label) # no criterion in prediction
             pred = F.softmax(output)
-            # no acc in prediction
-            # acc1 = paddle.metric.accuracy(pred, label.unsqueeze(1))
-            # acc5 = paddle.metric.accuracy(pred, label.unsqueeze(1), k=5)
             preds.append(pred)
             if logger and batch_id % debug_steps == 0:
                 logger.info(f"Pred Step[{batch_id:04d}/{total_batch:04d}], done")

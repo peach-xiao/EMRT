@@ -3,7 +3,7 @@ import paddle.nn as nn
 import paddle.nn.functional as F
 import numpy as np
 import math
-from .EMRT_utils_paddle.transformer_encoder_decoder_cswin import EncoderDecoder_CSwin
+from .EMRT_utils.transformer_encoder_decoder_cswin import EncoderDecoder_CSwin
 from src.models.decoders.fcn_head import FCNHead
 from src.models.backbones import CSwinTransformer
 from src.models.backbones import VisualTransformer  # Vit as backbone

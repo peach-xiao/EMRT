@@ -223,7 +223,6 @@ class ResNetV1(nn.Layer):
 
 def resnet50c(config, norm_layer=nn.BatchNorm2D):
     """resnet50c implement
-     将7x7的卷积替换成了3个3x3的卷积
     The ResNet-50 [Heet al., 2016] with dilation convolution at last stage,
     ResNet-50 model Ref, https://arxiv.org/pdf/1512.03385.pdf
 

@@ -6,7 +6,7 @@ from .backbones import get_segmentation_backbone  # resnet50c
 from .backbones import paddle_vision_resnet as resnet
 from .backbones import resnext
 from .backbones import resnest
-from .EMRT_utils_paddle.transformer_encoder_decoder import EncoderDecoder
+from .EMRT_utils.transformer_encoder_decoder import EncoderDecoder
 from src.models.backbones.paddleseg_segformer import mix_transformer
 from src.models.decoders.fcn_head import FCNHead
 

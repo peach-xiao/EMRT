@@ -54,7 +54,7 @@ def parse_args():
 
 
 def main():
-    plot_corve = True
+    plot_corve = False
     config = get_config()
     args = parse_args()
     config = update_config(config, args)
@@ -137,11 +137,6 @@ def main():
     batch_start = time.time()
     cur_iter = start_iter
 
-    train_loss_all = []
-    val_itear_all = []
-    val_miou_all = []
-    val_oa_all = []
-    val_mf1_all = []
     # begin training
     for data in train_loader:
         cur_iter += 1
@@ -184,7 +179,6 @@ def main():
                     (cur_iter - 1) // iters_per_epoch + 1, total_epoch + 1, cur_iter, config.TRAIN.ITERS, avg_loss,
                     lr, avg_train_batch_cost, avg_train_reader_cost,
                     batch_cost_averager.get_ips_average(), eta))
-            train_loss_all.append(avg_loss)
             avg_loss = 0.0
             avg_loss_list = []
             reader_cost_averager.reset()
@@ -197,10 +191,6 @@ def main():
             logger.info("In this val: mIoU {:.4f},  Acc: {:.4f}, F1-Score:{:.4f}".format(mean_iou, acc, mean_f1))
             logger.info(
                 "Current best_mIoU: {:.4f},  Acc: {:.4f}, iter: {}".format(best_mean_iou, best_acc, best_model_iter))
-            val_itear_all.append(cur_iter)
-            val_miou_all.append(mean_iou)
-            val_oa_all.append(acc)
-            val_mf1_all.append(mean_f1)
 
             model.train()
 
@@ -217,7 +207,7 @@ def main():
             logger.info("saving the weights of model to {}".format(
                 current_save_weigth_file))
 
-            if len(save_models) > config.KEEP_CHECKPOINT_MAX > 0:  # KEEP_CHECKPOINT_MAX = 1 删除模型，只保留1个
+            if len(save_models) > config.KEEP_CHECKPOINT_MAX > 0:
                 files_to_remove = save_models.popleft()
                 os.remove(files_to_remove[0])
                 os.remove(files_to_remove[1])
@@ -235,7 +225,7 @@ def main():
                 logger.info(
                     "[EVAL] Images: {}  mIoU: {:.4f}  Acc: {:.4f}  Kappa: {:.4f}  mean_f1: {:.4f}".format(len(dataset_val), mean_iou,
                                                                                           acc, kappa, mean_f1))
-                logger.info("[EVAL] Class IoU: " + str(np.round(class_iou, 4)))  # round() 返回浮点数x的四舍五入值。
+                logger.info("[EVAL] Class IoU: " + str(np.round(class_iou, 4)))
                 logger.info("[EVAL] Class Acc: " + str(np.round(class_acc, 4)))
                 logger.info("[EVAL] Class F1-score: " + str(np.round(class_f1, 4)) + "\n")
 
@@ -246,23 +236,8 @@ def main():
                                                                                  len(train_loader)))
     print('[EVAL] The model with the best validation mIoU ({:.4f}) was saved at iter {}.\n'.format(best_mean_iou,
                                                                                                    best_model_iter))
-    if plot_corve:
-        print("\ntrain_loss_all: ",train_loss_all)
-        print("\nval_miou_all: ", val_miou_all)
-        print("\nval_oa_all: ", val_oa_all)
-        print("\nval_mf1_all: ", val_mf1_all)
 
-        with open("./draw_curve/multihead_train_loss.txt", 'w') as train_loss:
-            train_loss.write(str(train_loss_all))
-        with open("./draw_curve/multihead_iter_all.txt", 'w') as iter_all:
-            iter_all.write(str(val_itear_all))
-        with open("./draw_curve/multihead_val_miou.txt", 'w') as val_miou:
-            val_miou.write(str(val_miou_all))
-        with open("./draw_curve/multihead_val_oa.txt", 'w') as val_oa:
-            val_oa.write(str(val_oa_all))
-        with open("./draw_curve/multihead_val_mf1.txt", 'w') as val_mf1:
-            val_mf1.write(str(val_mf1_all))
-
+    # Calculate flops.
     if local_rank == 0:
         _, c, h, w = images.shape
         _ = paddle.flops(
@@ -277,9 +252,9 @@ def main():
         mulValue = np.prod(p.shape)
         Total_params += mulValue
         if p.stop_gradient:
-            NonTrainable_params += mulValue  # 可训练参数量
+            NonTrainable_params += mulValue
         else:
-            Trainable_params += mulValue  # 非可训练参数量
+            Trainable_params += mulValue
 
     print(f'Total params: {Total_params}')
     print(f'Trainable params: {Trainable_params}')

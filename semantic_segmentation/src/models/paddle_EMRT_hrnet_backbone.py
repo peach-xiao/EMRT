@@ -3,7 +3,7 @@ import paddle.nn as nn
 import paddle.nn.functional as F
 import numpy as np
 from .backbones import hrnet
-from .EMRT_utils_paddle.transformer_encoder_decoder import EncoderDecoder
+from .EMRT_utils.transformer_encoder_decoder import EncoderDecoder
 from src.models.decoders.fcn_head import FCNHead
 
 class Conv2dBlock(nn.Layer):

@@ -1,64 +1,92 @@
-"""
-Positional encodings for the transformer.
-"""
+# Copyright (c) 2021 PaddlePaddle Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Modified from DETR (https://github.com/facebookresearch/detr)
+# Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
+
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import math
 import paddle
-from paddle import nn
-from typing import Optional
-
-# Featuremap的位置编码，position_embedding 的前向如下：
-# 利用三角函数的方式获取position_embedding，输入是NestedTensor={tensor,mask}, 输出最终pos的size为[1,2,256,7,8]
-class PositionEmbeddingSine(nn.Layer):
-    """
-    This is a more standard version of the position embedding, very similar to the one
-    used by the Attention is all you need paper, generalized to work on images.
-    """
-    def __init__(self, num_pos_feats=64, temperature=10000, normalize=False, scale=None):
-        super().__init__()
-        self.num_pos_feats = num_pos_feats
-        self.temperature = temperature
-        self.normalize = normalize
-        if scale is not None and normalize is False:
-            raise ValueError("normalize should be True if scale is passed")
-        if scale is None:
-            scale = 2 * math.pi
-        self.scale = scale
-
-    def forward(self, x):
-        bs, c, h, w = x.shape
-        mask = paddle.zeros(shape=[bs, h, w], dtype="bool").cuda()
-        assert mask is not None
-        not_mask = ~mask
-        y_embed = not_mask.cumsum(1, dtype='float32')
-        x_embed = not_mask.cumsum(2, dtype='float32')
-        if self.normalize:
-            eps = 1e-6
-            y_embed = (y_embed - 0.5) / (y_embed[:, -1:, :] + eps) * self.scale
-            x_embed = (x_embed - 0.5) / (x_embed[:, :, -1:] + eps) * self.scale
-
-        # num_pos_feats = 128
-        ## 0~127 self.num_pos_feats=128,因为前面输入向量是256，编码是一半sin，一半cos
-        dim_t = 2 * (paddle.arange(self.num_pos_feats) // 2).astype('float32')
-        dim_t = self.temperature ** (dim_t / self.num_pos_feats)
-
-        ## 输出shape=b,h,w,128
-        # pos_x = x_embed[:, :, :, None] / dim_t
-        # pos_y = y_embed[:, :, :, None] / dim_t
-        pos_x = x_embed.unsqueeze(-1) / dim_t
-        pos_y = y_embed.unsqueeze(-1) / dim_t
-        pos_x = paddle.stack((pos_x[:, :, :, 0::2].sin(), pos_x[:, :, :, 1::2].cos()), axis=4).flatten(3)
-        pos_y = paddle.stack((pos_y[:, :, :, 0::2].sin(), pos_y[:, :, :, 1::2].cos()), axis=4).flatten(3)
-        pos = paddle.concat((pos_y, pos_x), axis=3).transpose([0, 3, 1, 2])
-        # 每个特征图的xy位置都编码成256的向量，其中前128是y方向编码，而128是x方向编码
-        return pos
-        ## b,n=256,h,w
+import paddle.nn as nn
 
 
-def build_position_encoding(mode, hidden_dim):
-    N_steps = hidden_dim // 2
-    if mode in ('v2', 'sine'):
-        position_embedding = PositionEmbeddingSine(num_pos_feats=N_steps, normalize=True)
-    else:
-        raise ValueError(f"not supported {mode}")
+class PositionEmbedding(nn.Layer):
+    def __init__(self, num_pos_feats=128, temperature=10000, normalize=True, scale=None, embed_type='sine',
+                 num_embeddings=50, offset=0.):
+        super(PositionEmbedding, self).__init__()
+        assert embed_type in ['sine', 'learned']
 
-    return position_embedding
+        self.embed_type = embed_type
+        self.offset = offset
+        self.eps = 1e-6
+        if self.embed_type == 'sine':
+            self.num_pos_feats = num_pos_feats
+            self.temperature = temperature
+            self.normalize = normalize
+            if scale is not None and normalize is False:
+                raise ValueError("normalize should be True if scale is passed")
+            if scale is None:
+                scale = 2 * math.pi
+            self.scale = scale
+        elif self.embed_type == 'learned':
+            self.row_embed = nn.Embedding(num_embeddings, num_pos_feats)
+            self.col_embed = nn.Embedding(num_embeddings, num_pos_feats)
+        else:
+            raise ValueError(f"not supported {self.embed_type}")
+
+    def forward(self, mask):
+        """
+        Args:
+            mask (Tensor): [B, H, W]
+        Returns:
+            pos (Tensor): [B, C, H, W]
+        """
+        assert mask.dtype == paddle.bool
+        if self.embed_type == 'sine':
+            mask = mask.astype('float32')
+            y_embed = mask.cumsum(1, dtype='float32') #沿给定 axis 计算张量 x 的累加和。
+            x_embed = mask.cumsum(2, dtype='float32')
+            if self.normalize:
+                y_embed = (y_embed + self.offset) / (y_embed[:, -1:, :] + self.eps) * self.scale
+                x_embed = (x_embed + self.offset) / (x_embed[:, :, -1:] + self.eps) * self.scale
+
+            dim_t = 2 * (paddle.arange(self.num_pos_feats) // 2).astype('float32')
+            dim_t = self.temperature ** (dim_t / self.num_pos_feats)
+
+            pos_x = x_embed.unsqueeze(-1) / dim_t
+            pos_y = y_embed.unsqueeze(-1) / dim_t
+            pos_x = paddle.stack((pos_x[:, :, :, 0::2].sin(), pos_x[:, :, :, 1::2].cos()), axis=4).flatten(3)
+            pos_y = paddle.stack((pos_y[:, :, :, 0::2].sin(), pos_y[:, :, :, 1::2].cos()), axis=4).flatten(3)
+            pos = paddle.concat((pos_y, pos_x), axis=3).transpose([0, 3, 1, 2])
+            return pos
+
+        elif self.embed_type == 'learned':
+            h, w = mask.shape[-2:]
+            i = paddle.arange(w)
+            j = paddle.arange(h)
+            x_emb = self.col_embed(i)
+            y_emb = self.row_embed(j)
+            pos = paddle.concat(
+                [
+                    x_emb.unsqueeze(0).repeat(h, 1, 1),
+                    y_emb.unsqueeze(1).repeat(1, w, 1),
+                ],
+                axis=-1).transpose([2, 0, 1]).unsqueeze(0).tile(mask.shape[0],
+                                                                1, 1, 1)
+            return pos
+        else:
+            raise ValueError(f"not supported {self.embed_type}")

@@ -32,6 +32,7 @@ from ptflops import get_model_complexity_info
 
 # How to start verification?
 # CUDA_VISIBLE_DEVICES=3 python3 val.py --config ./configs/EMRT/EMRT_256x256_160k_potsdam.yaml --model_path ./EMRT_256x256_160k_potsdam_resnet50_pretrain_os32/best_model.pdparams
+# CUDA_VISIBLE_DEVICES=3 python3 val.py
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Evaluation of Seg. Models')
@@ -74,7 +75,7 @@ if __name__ == '__main__':
     # build model
     model = get_model(config)
 
-    if args.model_path:  # 加载模型
+    if args.model_path:
         load_entire_model(model, args.model_path)
         logger.info('Loaded trained params of model successfully')
     model.eval()
@@ -92,7 +93,7 @@ if __name__ == '__main__':
 
     # build val dataset and dataloader
     transforms_val = [Resize(target_size=config.VAL.IMAGE_BASE_SIZE,
-                             keep_ori_size=config.VAL.KEEP_ORI_SIZE),  # KEEP_ORI_SIZE 默认为False，即不保保持原大小，需要改变大小
+                             keep_ori_size=config.VAL.KEEP_ORI_SIZE),
                       Normalize(mean=config.VAL.MEAN, std=config.VAL.STD)]
 
     dataset_val = get_dataset(config, data_transform=transforms_val, mode='val')
@@ -144,11 +145,11 @@ if __name__ == '__main__':
                 pred = infer.ss_inference(
                     model=model,
                     img=img,
-                    ori_shape=ori_shape,  # 返回(1, num_classes, h, w), h,w就是ori.shape
-                    is_slide=True,  # 是否通过滑动窗口推断
-                    base_size=config.VAL.IMAGE_BASE_SIZE,  # 当短边的尺寸小于min(base_size)时，将其调整为min(base_size)。
-                    stride_size=config.VAL.STRIDE_SIZE,  # 步长
-                    crop_size=config.VAL.CROP_SIZE,  # 滑动窗口的大小
+                    ori_shape=ori_shape,
+                    is_slide=True,
+                    base_size=config.VAL.IMAGE_BASE_SIZE,
+                    stride_size=config.VAL.STRIDE_SIZE,
+                    crop_size=config.VAL.CROP_SIZE,
                     num_classes=config.DATA.NUM_CLASSES,
                     rescale_from_ori=config.VAL.RESCALE_FROM_ORI)
 
@@ -217,14 +218,13 @@ if __name__ == '__main__':
     Trainable_params = 0
     NonTrainable_params = 0
 
-    # 获取参数情况
     for p in model.parameters():
-        mulValue = np.prod(p.shape)  # 使用numpy prod接口计算数组所有元素之积
-        Total_params += mulValue  # 总参数量
+        mulValue = np.prod(p.shape)
+        Total_params += mulValue
         if p.stop_gradient:
-            NonTrainable_params += mulValue  # 可训练参数量
+            NonTrainable_params += mulValue
         else:
-            Trainable_params += mulValue  # 非可训练参数量
+            Trainable_params += mulValue
 
     print(f'Total params: {Total_params / 1000000.0 }')
     print(f'Trainable params: {Trainable_params / 1000000.0 }')
