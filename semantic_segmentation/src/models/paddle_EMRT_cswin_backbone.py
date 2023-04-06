@@ -245,7 +245,7 @@ class EMRT_CSwin(nn.Layer):
             for idx in self.backbone_out_indices:  # [0, 1, 2, 3]
                 self.layer_norms.append(nn.LayerNorm(self.num_features[idx]))
 
-        self.encoder_Detrans = EncoderDecoder_CSwin(hidden_dim=256, dim_feedforward=1024,
+        self.model = EncoderDecoder_CSwin(hidden_dim=256, dim_feedforward=1024,
                                                           backbone_num_channels=self.num_features[1:],  # 192, 384,768
                                                           dropout=0.1, activation='relu',
                                                           num_feature_levels=3, nhead=8,
@@ -276,7 +276,7 @@ class EMRT_CSwin(nn.Layer):
 
         x_context = self.spatial_branch(inputs)
         x_psp = self.psp_module(x_context)
-        x_trans, memory = self.encoder_Detrans(x_fea, x_psp)
+        x_trans, memory = self.model(x_fea, x_psp)
         x_trans = x_trans.squeeze(0).transpose([0, 2, 1])
 
         x0_index = x_fea[0].shape[-1] * x_fea[0].shape[-2]  # 28 * 28 = 784
