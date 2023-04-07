@@ -172,7 +172,6 @@ class UpHead(nn.Layer):
             x = F.interpolate(x, up2x_resolution, mode='bilinear', align_corners=self.align_corners)
         return x
 
-
 class EMRT_HRNet(nn.Layer):
     def __init__(self, config):
         super(EMRT_HRNet, self).__init__()

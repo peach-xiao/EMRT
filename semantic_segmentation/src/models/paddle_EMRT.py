@@ -28,7 +28,6 @@ class Conv2dBlock(nn.Layer):
         out = out + x
         return out
 
-
 class EFP(nn.Layer):
     def __init__(self, in_channels=256, out_channels=256):
         super(EFP, self).__init__()
@@ -47,7 +46,6 @@ class EFP(nn.Layer):
         x_out0 = self.conv0(x0)
         x_out = x_out0 + x_out21
         return x_out
-
 
 class PyramidPoolingModule(nn.Layer):
     def __init__(self, pool_scales, in_channels, channels, align_corners=False):
@@ -79,7 +77,6 @@ class PyramidPoolingModule(nn.Layer):
         center = paddle.concat(outs, axis=-1)
         return center
 
-
 class branch_block(nn.Layer):
     def __init__(self, in_channels, out_channels, downsample=True):
         super(branch_block, self).__init__()
@@ -99,7 +96,6 @@ class branch_block(nn.Layer):
         x = self.encode(x)
         return x
 
-
 class spatial_branch(nn.Layer):
     def __init__(self, in_channels=3):
         super(spatial_branch, self).__init__()
@@ -115,7 +111,6 @@ class spatial_branch(nn.Layer):
         enc2 = self.Enc2(enc1)
         # enc3 = self.Enc3(enc2)
         return enc2
-
 
 class UpHead(nn.Layer):
     def __init__(self, embed_dim=256, num_conv=1, num_upsample_layer=1,
@@ -184,7 +179,6 @@ class UpHead(nn.Layer):
             up2x_resolution = [2 * item for item in x.shape[2:]]
             x = F.interpolate(x, up2x_resolution, mode='bilinear', align_corners=self.align_corners)
         return x
-
 
 class EMRT(nn.Layer):
     def __init__(self, config):
