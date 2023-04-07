@@ -7,7 +7,7 @@ from .backbones import paddle_vision_resnet as resnet
 from .backbones import resnext
 from .backbones import resnest
 from .EMRT_utils.transformer_encoder_decoder import EncoderDecoder
-from src.models.backbones.paddleseg_segformer import mix_transformer
+from src.models.backbones import segformer_paddleSeg
 from src.models.decoders.fcn_head import FCNHead
 
 class Conv2dBlock(nn.Layer):
@@ -243,7 +243,7 @@ class EMRT(nn.Layer):
         elif self.backbone == "resnest50":
             self.backbone = resnest.ResNeSt50(pretrained=True)
         elif self.backbone == "segformer_b4":
-            self.backbone = mix_transformer.MixVisionTransformer_B4(num_classes=6, pretrained=config.MODEL.PRETRAINED)
+            self.backbone = segformer_paddleSeg.SegFormer_B4(pretrained=config.MODEL.PRETRAINED)
 
         self.model = EncoderDecoder(hidden_dim=256, dim_feedforward=1024,
                                     # backbone_num_channels=[128, 256, 512],
