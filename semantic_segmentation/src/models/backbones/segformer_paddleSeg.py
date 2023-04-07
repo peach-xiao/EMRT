@@ -81,7 +81,7 @@ class SegFormer(nn.Layer):
         feats = self.backbone(x)
         c1, c2, c3, c4 = feats
 
-        # return c1, c2, c3, c4
+        return c1, c2, c3, c4
         ############## MLP decoder on C1-C4 ###########
         c1_shape = paddle.shape(c1)
         c2_shape = paddle.shape(c2)
