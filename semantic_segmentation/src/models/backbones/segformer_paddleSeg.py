@@ -81,7 +81,8 @@ class SegFormer(nn.Layer):
         feats = self.backbone(x)
         c1, c2, c3, c4 = feats
 
-        # return c1, c2, c3, c4
+        return c1, c2, c3, c4
+
         ############## MLP decoder on C1-C4 ###########
         c1_shape = paddle.shape(c1)
         c2_shape = paddle.shape(c2)
@@ -164,8 +165,8 @@ def SegFormer_B3(**kwargs):
 def SegFormer_B4(**kwargs):
     print("using backbone: SegFormer_B4")
     return SegFormer(
-        backbone=manager.BACKBONES['MixVisionTransformer_B4'](),
-        # backbone=mix_transformer.MixVisionTransformer_B4(),
+        # backbone=manager.BACKBONES['MixVisionTransformer_B4'](),
+        backbone=mix_transformer.MixVisionTransformer_B4(),
         embedding_dim=768,
         **kwargs)
 
@@ -173,7 +174,7 @@ def SegFormer_B4(**kwargs):
 def SegFormer_B5(**kwargs):
     print("using backbone: SegFormer_B5")
     return SegFormer(
-        backbone=manager.BACKBONES['MixVisionTransformer_B5'](),
-        # backbone=mix_transformer.MixVisionTransformer_B5(),
+        # backbone=manager.BACKBONES['MixVisionTransformer_B5'](),
+        backbone=mix_transformer.MixVisionTransformer_B5(),
         embedding_dim=768,
         **kwargs)

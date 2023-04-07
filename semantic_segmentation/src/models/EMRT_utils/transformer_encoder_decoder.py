@@ -106,8 +106,6 @@ class MSDeformableAttention(nn.Layer):
         output = self.output_proj(output)
         return output
 
-
-
 class TransformerEncoderLayer(nn.Layer):
     def __init__(self, d_model=256, n_head=8, dim_feedforward=1024, dropout=0.1, activation="relu", n_levels=4,
                  n_points=4, weight_attr=None, bias_attr=None):

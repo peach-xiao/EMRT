@@ -34,10 +34,10 @@ def parse_args():
         # default="configs/EMRT/EMRT_256x256_160k_potsdam_hrnet.yaml",
         # default="configs/EMRT/EMRT_256x256_160k_potsdam_cswin.yaml",
         # default="configs/EMRT/EMRT_256x256_160k_potsdam_vit.yaml",
-        # default="configs/EMRT/EMRT_256x256_160k_potsdam_segformer.yaml",
+        default="configs/EMRT/EMRT_256x256_160k_potsdam_segformer.yaml",
 
         # different dataset
-        default="configs/EMRT/EMRT_256x256_160k_potsdam.yaml",
+        # default="configs/EMRT/EMRT_256x256_160k_potsdam.yaml",
         # default="configs/EMRT/EMRT_256x256_120k_vaihingen.yaml",
         # default="configs/EMRT/EMRT_256x256_160k_loveda.yaml",
 
