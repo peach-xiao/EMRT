@@ -82,10 +82,7 @@ class SegFormer(nn.Layer):
         c1, c2, c3, c4 = feats
 
         return c1, c2, c3, c4
-<<<<<<< HEAD
 
-=======
->>>>>>> ffda533a3d90cdc36e38042491573c06055ca3f6
         ############## MLP decoder on C1-C4 ###########
         c1_shape = paddle.shape(c1)
         c2_shape = paddle.shape(c2)
