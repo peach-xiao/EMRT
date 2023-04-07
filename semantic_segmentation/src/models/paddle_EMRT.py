@@ -243,7 +243,7 @@ class EMRT(nn.Layer):
         elif self.backbone == "resnest50":
             self.backbone = resnest.ResNeSt50(pretrained=True)
         elif self.backbone == "segformer_b4":
-            self.backbone = segformer_paddleSeg.SegFormer_B4(pretrained=config.MODEL.PRETRAINED)
+            self.backbone = segformer_paddleSeg.SegFormer_B4(num_classes=6, pretrained=config.MODEL.PRETRAINED)
 
         self.model = EncoderDecoder(hidden_dim=256, dim_feedforward=1024,
                                     # backbone_num_channels=[128, 256, 512],
